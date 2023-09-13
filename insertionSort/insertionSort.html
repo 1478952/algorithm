@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>insertionSort</title>
+  </head>
+  <body>
+    <script>
+      const insertionSort = (array) => {
+        for (let i = 1; i < array.length; i++) {
+          const temp = array[i]; // arr[1] = 2
+          let j = i - 1; // 0
+
+          while (temp < array[j]) {
+            // 2 < arr[0] = 3 === true
+            array[j + 1] = array[j]; // [3, 3, 1]
+            j--; // -1
+          }
+          array[j + 1] = temp; // arr[0] = 2
+        }
+        return array; // [2, 3, 1]
+      };
+
+      const sortedArray = insertionSort([3, 2, 1]);
+      console.log(sortedArray); // [1, 2, 3]
+    </script>
+  </body>
+</html>
