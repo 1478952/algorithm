@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>달리기 경주</title>
+  </head>
+  <body>
+    <script>
+      const player = ["mumu", "soe", "poe", "kai", "mine"];
+      const calling = ["kai", "kai", "mine", "mine"];
+
+      // 내 답안
+      function mySolution(player, calling) {
+        for (let i = 0; i < calling.length; i++) {
+          const target = calling[i];
+          const targetIndex = player.indexOf(target);
+          const currentTarget = player[targetIndex - 1];
+          player[targetIndex - 1] = target;
+          player[targetIndex] = currentTarget;
+        }
+        return player;
+      }
+
+      console.log(mySolution(player, calling));
+      // result = ["mumu", "kai", "mine", "soe", "poe"]
+
+      // 풀이 답안
+      function solution(players, callings) {
+        const keyPlayers = {};
+        const keyRanks = {};
+        players.forEach((player, idx) => {
+          const rank = idx + 1;
+          keyPlayers[player] = rank;
+          keyRanks[rank] = player;
+        });
+
+        callings.forEach((calling) => {
+          const losePlayer = keyRanks[keyPlayers[calling] - 1];
+
+          keyRanks[keyPlayers[calling]] = losePlayer;
+          keyRanks[keyPlayers[losePlayer]] = calling;
+          keyPlayers[calling] -= 1;
+          keyPlayers[losePlayer] += 1;
+        });
+
+        return Object.values(keyRanks);
+      }
+    </script>
+  </body>
+</html>

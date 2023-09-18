@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>quizSort</title>
+  </head>
+  <body>
+    <script>
+      const partition = (arr, left, right, pivotIndex) => {
+        let temp;
+        const pivot = arr[pivotIndex]; // 3
+        while (left <= right) {
+          // 4 <= 2
+          while (arr[left] < pivot) left++;
+          while (arr[right] > pivot) right++;
+          if (left <= right) {
+            temp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = temp;
+            left++;
+            right--;
+          }
+        }
+        temp = array[left];
+        array[left] = array[pivotIndex];
+        array[pivotIndex] = temp;
+      };
+
+      const quickSort = (arr, left, right) => {
+        // [4, 1, 3, 2]
+        if (!left) left = 0;
+        if (!right) right = arr.length - 1;
+        let pivotIndex = right; // 3
+        pivotIndex = partition(arr, left, right - 1, pivotIndex);
+        if (left < pivotIndex - 1) quickSort(arr, left, pivotIndex - 1);
+        if (pivotIndex + 1 < right) quickSort(arr, pivotIndex + 1, right);
+        return arr;
+      };
+
+      quickSort([4, 1, 3, 2]);
+    </script>
+  </body>
+</html>
