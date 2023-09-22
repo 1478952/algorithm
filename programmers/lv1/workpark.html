@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>공원산책</title>
+  </head>
+  <body>
+    <script>
+      const park = ["SOO", "OXX", "OOO"];
+      const routes = ["E 2", "S 2", "W 1"];
+
+      function solution(park, routes) {
+        const East = "E";
+        const West = "W";
+        const South = "S";
+        const North = "N";
+
+        const dogPoint = [0, 0];
+
+        dogPoint[0] = park.findIndex((item) => {
+          if (item.indexOf("S") !== -1) {
+            dogPoint[1] = item.indexOf("S");
+            return item;
+          }
+        });
+
+        function checkDogRootTrap(arrIndex, count, addOrMinus) {
+          const routes = [];
+
+          for (let i = 0; i < count; i++) {
+            if (arrIndex === 0) {
+              const refPosition = dogPoint[0];
+              if (addOrMinus === "ADD") {
+                routes.push(park[refPosition + i][dogPoint[1]] === "X");
+              } else {
+                routes.push(park[refPosition - i][dogPoint[1]] === "X");
+              }
+            } else {
+              const refPosition = dogPoint[1];
+              if (addOrMinus === "ADD") {
+                routes.push(park[dogPoint[1]][refPosition + i] === "X");
+              } else {
+                routes.push(park[dogPoint[1]][refPosition - i] === "X");
+              }
+            }
+          }
+
+          return !!routes.find((route) => route === true);
+        }
+
+        for (const route of routes) {
+          const [way, _, _count] = route.split("");
+          const count = parseInt(_count);
+          let dogWay;
+          let isCheckRouteTrap;
+          switch (way) {
+            case East:
+              isCheckRouteTrap = checkDogRootTrap(1, count, "ADD");
+              dogWay = park[dogPoint[0]][dogPoint[1] + count];
+              if (dogWay && !isCheckRouteTrap) {
+                dogPoint[1] = dogPoint[1] + count;
+              }
+              continue;
+            case West:
+              isCheckRouteTrap = checkDogRootTrap(1, count, "MINUS");
+              dogWay = park[dogPoint[0]][dogPoint[1] - count];
+              if (dogWay && !isCheckRouteTrap) {
+                dogPoint[1] = dogPoint[1] - count;
+              }
+              continue;
+            case South:
+              isCheckRouteTrap = checkDogRootTrap(0, count, "ADD");
+              dogWay = park[dogPoint[0] + count][dogPoint[1]];
+              if (dogWay && !isCheckRouteTrap) {
+                dogPoint[0] = dogPoint[0] + count;
+              }
+              continue;
+            case North:
+              isCheckRouteTrap = checkDogRootTrap(0, count, "MINUS");
+              dogWay = park[dogPoint[0] - count][dogPoint[1]];
+              if (dogWay && !isCheckRouteTrap) {
+                dogPoint[0] = dogPoint[0] - count;
+              }
+              continue;
+            default:
+              continue;
+          }
+        }
+
+        return dogPoint;
+      }
+
+      console.log(solution(park, routes));
+
+      // [2,1]
+      // 70점짜리 정답코드
+
+      function realSolution(park, routes) {
+        const maxRow = park.length,
+          maxCol = park[0].length;
+        const Routes = routes.map((route) => {
+          const [op, n] = route.split(" ");
+          return { op, n: Number(n) };
+        });
+
+        let sRowIdx, sColIdx;
+        for (let rowIdx = 0; rowIdx < park.length; rowIdx++) {
+          const sIndex = park[rowIdx].indexOf("S");
+          if (sIndex > -1) {
+            sRowIdx = Number(rowIdx);
+            sColIdx = Number(sIndex);
+            break;
+          }
+        }
+
+        Routes.forEach(({ op, n }) => {
+          if (op === "E") {
+            if (sColIdx + n < maxCol) {
+              let isX = false;
+              for (let i = sColIdx; i < sColIdx + n; i++) {
+                if (park[sRowIdx][i] === "X") {
+                  isX = true;
+                  break;
+                }
+              }
+              if (!isX) {
+                sColIdx += n;
+              }
+            }
+          } else if (op === "W") {
+            if (sColIdx - n >= 0) {
+              let isX = false;
+              for (let i = sColIdx; i > sColIdx - n; i--) {
+                if (park[sRowIdx][i] === "X") {
+                  isX = true;
+                  break;
+                }
+              }
+              if (!isX) {
+                sColIdx -= n;
+              }
+            }
+          } else if (op === "S") {
+            if (sRowIdx + n < maxRow) {
+              let isX = false;
+              for (let i = sRowIdx; i < sRowIdx + n; i++) {
+                if (park[i][sColIdx] === "X") {
+                  isX = true;
+                  break;
+                }
+              }
+              if (!isX) {
+                sRowIdx += n;
+              }
+            }
+          } else if (op === "N") {
+            if (sRowIdx - n >= 0) {
+              let isX = false;
+              for (let i = sRowIdx; i > sRowIdx - n; i--) {
+                if (park[i][sColIdx] === "X") {
+                  isX = true;
+                  break;
+                }
+              }
+              if (!isX) {
+                sRowIdx -= n;
+              }
+            }
+          }
+        });
+        const answer = [sRowIdx, sColIdx];
+        return answer;
+      }
+    </script>
+  </body>
+</html>
