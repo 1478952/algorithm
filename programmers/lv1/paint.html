@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>덧칠하기</title>
+  </head>
+  <body>
+    <script>
+      const n = 8;
+      const m = 4;
+      const section = [2, 3, 6];
+
+      function solution(n, m, section) {
+        let area = "";
+        let paintCount = 0;
+
+        for (let i = 0; i < n; i++) {
+          area += ".";
+        }
+        section.forEach((_section) => {
+          const arr = area.split("");
+          arr[_section - 1] = "#";
+          area = arr.join("");
+        });
+
+        while (area.indexOf("#") !== -1) {
+          const targetStart = area.indexOf("#");
+
+          const arr = area.split("");
+
+          for (let i = 0; i < m; i++) {
+            if (arr[targetStart + i] === "#") {
+              arr[targetStart + i] = ".";
+            }
+          }
+          area = arr.join("");
+          paintCount++;
+        }
+        return paintCount;
+      }
+
+      console.log(solution(n, m, section));
+
+      // 2
+
+      function realSolution(n, m, section) {
+        let tried = 0;
+        let maxRange = -Infinity;
+        section.forEach((range) => {
+          if (maxRange < range) {
+            tried++;
+            maxRange = range + m - 1;
+          }
+        });
+        return tried;
+      }
+    </script>
+  </body>
+</html>
