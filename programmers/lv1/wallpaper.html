@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>바탕화면 정리</title>
+  </head>
+  <body>
+    <script>
+      const wallPaper = [
+        ".##...##.",
+        "#..#.#..#",
+        "#...#...#",
+        ".#.....#.",
+        "..#...#..",
+        "...#.#...",
+        "....#....",
+      ];
+
+      function solution(wallPaper) {
+        let lux;
+        let luy;
+        let rdx;
+        let rdy;
+        for (let i = 0; i < wallPaper.length; i++) {
+          const findFirstTarget = wallPaper[i].indexOf("#");
+          const findLastTarget = wallPaper[i].lastIndexOf("#");
+
+          if (findFirstTarget === -1) {
+            continue;
+          }
+
+          if (lux === undefined) {
+            lux = i;
+          }
+
+          if (luy === undefined || findFirstTarget < luy) {
+            luy = findFirstTarget;
+          }
+
+          if (findLastTarget) {
+            rdx = i;
+          }
+
+          if (rdy === undefined || findLastTarget > rdy) {
+            rdy = findLastTarget;
+          }
+        }
+
+        return [lux, luy, rdx + 1, rdy + 1];
+      }
+
+      console.log(solution(wallPaper));
+
+      function realSolution(wallpaper) {
+        var answer = [];
+        let minRow = Infinity,
+          minColumn = Infinity,
+          maxRow = -Infinity,
+          maxColumn = -Infinity;
+        const twoDemWallpaper = wallpaper.map((rows) => rows.split(""));
+
+        twoDemWallpaper.forEach((rows, rowIdx) => {
+          rows.forEach((file, columnIdx) => {
+            if (file === "#") {
+              minRow = Math.min(minRow, rowIdx);
+              minColumn = Math.min(minColumn, columnIdx);
+              maxRow = Math.max(maxRow, rowIdx);
+              maxColumn = Math.max(maxColumn, columnIdx);
+            }
+          });
+        });
+
+        return [minRow, minColumn, maxRow + 1, maxColumn + 1];
+      }
+    </script>
+  </body>
+</html>
