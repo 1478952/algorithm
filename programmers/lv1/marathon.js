@@ -1,15 +1,26 @@
-const participant = ["marina", "josipa", "nikola", "vinko", "filipa"];
-const completion = ["josipa", "filipa", "marina", "nikola"];
+const participant = ["mislav", "stanko", "mislav", "ana"];
+const completion = ["stanko", "ana", "mislav"];
 
 function solution(participant, completion) {
-  const _participant = [...participant];
+  const answerObj = {};
 
+  participant.forEach((member) => {
+    if (answerObj[member]) {
+      answerObj[member] = answerObj[member] + 1;
+      return;
+    }
+    answerObj[member] = 1;
+  });
   completion.forEach((member) => {
-    const findMember = _participant.indexOf(member);
-    _participant[findMember] = "";
+    if (answerObj[member]) {
+      answerObj[member] = answerObj[member] - 1;
+      if (answerObj[member] === 0) {
+        delete answerObj[member];
+      }
+    }
   });
 
-  return _participant.join("");
+  return Object.keys(answerObj)[0];
 }
 
 console.log(solution(participant, completion));
